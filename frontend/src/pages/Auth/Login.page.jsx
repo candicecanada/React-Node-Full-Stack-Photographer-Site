@@ -44,7 +44,7 @@ const LoginPage = () => {
           Create account
         </Anchor>
       </Text>
-      <Paper withBorder shadow="md" p={30} mt={30} radius="md" onSubmit={onLogin}>  
+      <Paper withBorder shadow="md" p={30} mt={30} radius="md">  
         <TextInput label="Email" placeholder="email" name="email" type="email" required />
         <PasswordInput label="Password" placeholder="password" name="password" type="password" required mt="md" />
         <Group justify="space-between" mt="lg">
