@@ -15,8 +15,6 @@ import {
 } from '@mantine/core';
 import classes from './AuthenticationTitle.module.css';
 
-
-
 const LoginPage = () => {
   const navigate = useNavigate();
   const { loginService, authLoading, user } = useBoundStore((state) => state);
@@ -46,7 +44,8 @@ const LoginPage = () => {
           Create account
         </Anchor>
       </Text>
-      <Paper withBorder shadow="md" p={30} mt={30} radius="md" onSubmit={onLogin}>        <TextInput label="Email" placeholder="email" name="email" type="email" required />
+      <Paper withBorder shadow="md" p={30} mt={30} radius="md" onSubmit={onLogin}>  
+        <TextInput label="Email" placeholder="email" name="email" type="email" required />
         <PasswordInput label="Password" placeholder="password" name="password" type="password" required mt="md" />
         <Group justify="space-between" mt="lg">
           <Checkbox label="Remember me" />
