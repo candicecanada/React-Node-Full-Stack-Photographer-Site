@@ -7,6 +7,7 @@ import {
   Checkbox,
   Anchor,
   Paper,
+  Code,
   Title,
   Text,
   Container,
@@ -14,6 +15,7 @@ import {
   Button,
 } from '@mantine/core';
 import classes from './AuthenticationTitle.module.css';
+import { useForm, hasLength, isEmail } from '@mantine/form';
 
 const LoginPage = () => {
   const navigate = useNavigate();
@@ -25,14 +27,22 @@ const LoginPage = () => {
     }
   }, [user]);
 
-  const onLogin = async (e) => {
-    e.preventDefault();
-    console.log("login button clicked")
-    let email = e.target.email?.value;
-    let password = e.target.password?.value;
+  const onLogin = async () => {
+    let email = form.values.email;
+    let password = form.values.password;
     if (!email || !password) return;
     loginService(email, password);
   };
+
+  const form = useForm({
+    mode: 'uncontrolled', // doesn't seem to make any difference
+    initialValues: { email: '', password: '' },
+    validate: {
+      email: isEmail('Invalid email'),
+      password: hasLength({ min: 3 }, 'Must be at least 3 characters'),
+    },
+  });
+
   return (
     <Container size={420} my={40}>
       <Title ta="center" className={classes.title}>
@@ -44,9 +54,9 @@ const LoginPage = () => {
           Create account
         </Anchor>
       </Text>
-      <Paper withBorder shadow="md" p={30} mt={30} radius="md">  
-        <TextInput label="Email" placeholder="email" name="email" type="email" required />
-        <PasswordInput label="Password" placeholder="password" name="password" type="password" required mt="md" />
+      <form onSubmit={form.onSubmit(onLogin)}>
+        <TextInput {...form.getInputProps('email')} label="Email" placeholder="email" name="email" type="email" required />
+        <PasswordInput {...form.getInputProps('password')} label="Password" placeholder="password" name="password" type="password" required mt="md" />
         <Group justify="space-between" mt="lg">
           <Checkbox label="Remember me" />
           <Anchor component="button" size="sm">
@@ -57,7 +67,8 @@ const LoginPage = () => {
           Login
         </Button>
         {authLoading ? <Title>Loading...</Title> : null}
-      </Paper>
+      </form>
+
     </Container>
   );
 };
