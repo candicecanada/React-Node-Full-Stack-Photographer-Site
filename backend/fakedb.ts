@@ -7,6 +7,7 @@ export interface IDecodedUser {
 const users = [
   { id: 1, email: "john123@gmail.com", password: "123" },
   { id: 2, email: "sandra123@gmail.com", password: "123" },
+  { id: 9, email: "123@123.com", password: "123"}
 ];
 
 export const posts = [
@@ -36,10 +37,17 @@ export const addPost = (post: any) => {
   //  *     The request body contains the title, category, and image,
   //  *     but the addPost function needs to add a unique id
   //  *     and the id of the currently logged in user to the post.
-  post.id = 3;
-  post.userId = 2;
   posts.push(post);
 };
+
+export const deletePostById = (id: any) => {
+  for (let i=0; i<posts.length; i++) {
+    if (posts[i].id.toString() === id.toString()) {
+      posts.splice(i, 1);
+      i--;
+    }
+  }
+}
 
 export const verifyUser = (email: string, password: string) => {
   const user = users.find((user) => {
@@ -54,6 +62,13 @@ export const findUserById = (id: number) => {
   if (!user) throw new Error("User not found");
   return user;
 };
+
+export const findPostById = (id: any) => {
+  const post = posts.find((post) => post.id.toString() === id.toString());
+  console.log("posts in database: ", posts);
+  if (!post) throw new Error("Post not found");
+  return post;
+}
 
 export const parseToken = (authHeader: string | undefined, res: Response) => {
   if (!authHeader) {

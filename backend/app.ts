@@ -9,6 +9,7 @@ import {
   addPost,
   posts,
   sleep,
+  findPostById
 } from "./fakedb";
 
 const port = 8085;
@@ -42,15 +43,17 @@ app.post("/api/user/validation", (req, res) => {
   }
 });
 
-app.get("/api/posts", async (req, res) => {
+app.get("/api/posts", (req, res) => {
   // Sleep delay goes here
+  // await sleep(1000);
   res.json(posts);
 });
 
 // ⭐️ TODO: Implement this yourself
 app.get("/api/posts/:id", (req, res) => {
-  const id = req.params.id;
+  const postId = req.params.id;
   // The line below should be fixed.
+  const post = findPostById(postId);
   res.json(posts[0]);
 });
 

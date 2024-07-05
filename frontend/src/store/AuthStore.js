@@ -20,7 +20,7 @@ const createAuthStore = (set, get) => ({
       });
       if (res.data.result?.user && res.data.result?.token) {
         setSession(res.data.result?.token);
-        set({ user: res.data.result?.user, authLoading: false });
+        set({ user: res.data.result?.user });
       } else {
         set({ authLoading: false, user: null });
       }

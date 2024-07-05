@@ -13,6 +13,8 @@ import {
   Container,
   Group,
   Button,
+  Loader,
+  Center
 } from '@mantine/core';
 import classes from './AuthenticationTitle.module.css';
 import { useForm, hasLength, isEmail } from '@mantine/form';
@@ -20,6 +22,7 @@ import { useForm, hasLength, isEmail } from '@mantine/form';
 const LoginPage = () => {
   const navigate = useNavigate();
   const { loginService, authLoading, user } = useBoundStore((state) => state);
+
 
   useEffect(() => {
     if (!!user) {
@@ -42,6 +45,9 @@ const LoginPage = () => {
       password: hasLength({ min: 3 }, 'Must be at least 3 characters'),
     },
   });
+
+  console.log("Checking authLoading value: ");
+  console.log(authLoading);
 
   return (
     <Container size={420} my={40}>
@@ -66,8 +72,12 @@ const LoginPage = () => {
         <Button type="submit" fullWidth mt="xl">
           Login
         </Button>
-        {authLoading ? <Title>Loading...</Title> : null}
+        <Center>
+          {authLoading ? <Loader color="blue"/> : null}
+        </Center>
       </form>
+      
+      
 
     </Container>
   );
