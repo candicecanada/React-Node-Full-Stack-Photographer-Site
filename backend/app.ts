@@ -9,7 +9,8 @@ import {
   addPost,
   posts,
   sleep,
-  findPostById
+  findPostById,
+  deletePostById
 } from "./fakedb";
 
 const port = 8085;
@@ -43,9 +44,9 @@ app.post("/api/user/validation", (req, res) => {
   }
 });
 
-app.get("/api/posts", (req, res) => {
+app.get("/api/posts", async (req, res) => {
   // Sleep delay goes here
-  // await sleep(1000);
+  await sleep(100);
   res.json(posts);
 });
 
@@ -54,7 +55,7 @@ app.get("/api/posts/:id", (req, res) => {
   const postId = req.params.id;
   // The line below should be fixed.
   const post = findPostById(postId);
-  res.json(posts[0]);
+  res.json(post);
 });
 
 /**
@@ -67,10 +68,21 @@ app.get("/api/posts/:id", (req, res) => {
  *     What if you make a request to this route with a valid token but
  *     with an empty/incorrect payload (post)
  */
-app.post("/api/posts", (req, res) => {
-  const incomingPost = req.body;
-  addPost(incomingPost);
+app.post("/api/create", (req, res) => {
+  const newPost = req.body;
+  console.log("in CREATE POST, the passed in post is ", newPost)
+  addPost(newPost);
   res.status(200).json({ success: true });
 });
+
+app.post("/api/delete", (req, res) => {
+  const postId = req.body.id;
+  console.log("in DELETE POST, the passed in postId is ", postId)
+  deletePostById(postId);
+
+  res.status(200).json({ success: true });
+})
+
+
 
 app.listen(port, () => console.log("Server is running"));

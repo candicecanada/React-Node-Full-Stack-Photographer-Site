@@ -5,14 +5,19 @@ import { Button, Container, Grid, Stack, Box } from "@mantine/core";
 import { findPostById, deletePostById } from "../../../../backend/fakedb";
 import useBoundStore from "../../store/Store";
 import styles from "./PostDetails.page.module.css"
+import { useLoaderData } from "react-router-dom";
 
 function PostDetailsPage() {
-  const postId = useParams().id;
-  const post = findPostById(postId);
+  const post = useLoaderData();
   const { user } = useBoundStore((state) => state);
-  const handleDelete = () => {
-    deletePostById(postId);
+  console.log("passing the post to POST: ", post);
+  const handleDelete = async () => {
+    const res = await axios.post(`${DOMAIN}/api/delete`, post)
+    if (res?.data.success) {
+      navigate("/posts");
+    }
   }
+
   return (
     <>
       <Container>
@@ -49,8 +54,9 @@ function PostDetailsPage() {
 }
 
 export const postDetailsLoader = async ({ params }) => {
-  // do something with this
-  return null;
+  const res = await axios.get(`${DOMAIN}/api/posts/${params.id}`)
+  console.log(res.data);
+  return res.data;
 };
 
 export default PostDetailsPage;

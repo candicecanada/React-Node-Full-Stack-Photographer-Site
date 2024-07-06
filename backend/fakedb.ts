@@ -41,12 +41,16 @@ export const addPost = (post: any) => {
 };
 
 export const deletePostById = (id: any) => {
+  console.log("before delete, array length is: ", posts.length)
+  console.log("current posts are: ", posts);
+  console.log("trying to delete the post with id: ", id);
   for (let i=0; i<posts.length; i++) {
     if (posts[i].id.toString() === id.toString()) {
       posts.splice(i, 1);
-      i--;
+      console.log("FOUND!")
     }
   }
+  console.log("after delete, array length is: ", posts.length);
 }
 
 export const verifyUser = (email: string, password: string) => {
@@ -65,7 +69,6 @@ export const findUserById = (id: number) => {
 
 export const findPostById = (id: any) => {
   const post = posts.find((post) => post.id.toString() === id.toString());
-  console.log("posts in database: ", posts);
   if (!post) throw new Error("Post not found");
   return post;
 }
