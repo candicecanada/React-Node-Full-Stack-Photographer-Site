@@ -21,7 +21,7 @@ function CreatePostPage() {
   const handleSubmit = async (values) => {
     form.values.id = uuidv4();
     form.values.userId = user.id;
-    const res = await axios.post(`${DOMAIN}/api/create`, values);
+    const res = await axios.post(`${DOMAIN}/api/process-create`, values);
     if (res?.data.success) {
       navigate("/posts");
     }

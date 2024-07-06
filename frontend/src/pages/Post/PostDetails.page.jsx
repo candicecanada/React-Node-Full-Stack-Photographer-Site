@@ -1,25 +1,82 @@
 import { Link, useParams, useSearchParams } from "react-router-dom";
 import DOMAIN from "../../services/endpoint";
 import axios from "axios";
-import { Button, Container, Grid, Stack, Box } from "@mantine/core";
-import { findPostById, deletePostById } from "../../../../backend/fakedb";
+import { Button, Container, Grid, Stack, Box, TextInput, Group } from "@mantine/core";
 import useBoundStore from "../../store/Store";
 import styles from "./PostDetails.page.module.css"
 import { useLoaderData } from "react-router-dom";
+import {useState} from "react"; 
+
+import { useForm } from '@mantine/form';
 
 function PostDetailsPage() {
   const post = useLoaderData();
   const { user } = useBoundStore((state) => state);
-  console.log("passing the post to POST: ", post);
+
   const handleDelete = async () => {
-    const res = await axios.post(`${DOMAIN}/api/delete`, post)
+    const res = await axios.post(`${DOMAIN}/api/process-delete`, post)
     if (res?.data.success) {
       navigate("/posts");
     }
   }
 
+  const handleUpdate = async (values) => {
+    form.values.id = post.id;
+    form.values.userId = post.userId;
+    const res = await axios.post(`${DOMAIN}/api/process-update`, values)
+    if (res?.data.success) {
+      navigate("/posts");
+    }
+  };
+
+  const form = useForm({
+    mode: 'uncontrolled',
+    initialValues: {
+      image: post.image,
+      title: post.title,
+      category: post.category,
+      content: post.content,
+    },
+  });
+
+  const [isEdit, setIsEdit] = useState(false);
+
   return (
     <>
+      {isEdit ? 
+      <Box maw={300} mx="auto">
+      <form onSubmit={form.onSubmit(handleUpdate)}>
+        <TextInput
+          label="Title"
+          placeholder="Enter a Title"
+          {...form.getInputProps("title")}
+        />
+
+        <TextInput
+          label="Category"
+          placeholder="Enter a Category"
+          {...form.getInputProps("category")}
+        />
+        <TextInput
+          label="Image"
+          placeholder="Enter an Image"
+          {...form.getInputProps("image")}
+        />
+
+        <TextInput
+          label="Content"
+          placeholder="Enter some content"
+          {...form.getInputProps("content")}
+        />
+
+        <Group position="right" mt="md">
+          <Button type="submit">Update</Button>
+        </Group>
+      </form>
+      </Box>
+             
+
+      :
       <Container>
         <Grid>
           <Grid.Col span={user.id === post.userId ? 4 : 6}>
@@ -38,7 +95,9 @@ function PostDetailsPage() {
           <Grid.Col span={user.id === post.userId ? 4 : 0}>
             {user.id === post.userId ? 
             <Stack>
-              <Button>Edit</Button>
+              <Button>
+                <Link onClick={() => setIsEdit(true)}>Edit</Link>
+              </Button>
               <Button>
                 <Link to="/posts" onClick={handleDelete}>Delete</Link>
               </Button>
@@ -49,6 +108,7 @@ function PostDetailsPage() {
           <Link to="/posts">Back to Posts</Link>
         </Button>
       </Container>
+}
     </>
   );
 }

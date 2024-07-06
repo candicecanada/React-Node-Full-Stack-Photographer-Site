@@ -10,7 +10,8 @@ import {
   posts,
   sleep,
   findPostById,
-  deletePostById
+  deletePostById,
+  updatePostById
 } from "./fakedb";
 
 const port = 8085;
@@ -50,6 +51,7 @@ app.get("/api/posts", async (req, res) => {
   res.json(posts);
 });
 
+
 // ⭐️ TODO: Implement this yourself
 app.get("/api/posts/:id", (req, res) => {
   const postId = req.params.id;
@@ -68,21 +70,24 @@ app.get("/api/posts/:id", (req, res) => {
  *     What if you make a request to this route with a valid token but
  *     with an empty/incorrect payload (post)
  */
-app.post("/api/create", (req, res) => {
+app.post("/api/process-create", (req, res) => {
   const newPost = req.body;
-  console.log("in CREATE POST, the passed in post is ", newPost)
   addPost(newPost);
   res.status(200).json({ success: true });
 });
 
-app.post("/api/delete", (req, res) => {
+app.post("/api/process-delete", (req, res) => {
   const postId = req.body.id;
-  console.log("in DELETE POST, the passed in postId is ", postId)
   deletePostById(postId);
 
   res.status(200).json({ success: true });
 })
 
+app.post("/api/process-update", (req, res) => {
+  const post = req.body;
+  updatePostById(post.id, post);
 
+  res.status(200).json({ success: true });
+})
 
 app.listen(port, () => console.log("Server is running"));

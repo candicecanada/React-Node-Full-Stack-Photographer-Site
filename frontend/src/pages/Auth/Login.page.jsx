@@ -46,9 +46,6 @@ const LoginPage = () => {
     },
   });
 
-  console.log("Checking authLoading value: ");
-  console.log(authLoading);
-
   return (
     <Container size={420} my={40}>
       <Title ta="center" className={classes.title}>
