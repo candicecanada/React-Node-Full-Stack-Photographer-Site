@@ -6,12 +6,14 @@ import useBoundStore from "../../store/Store";
 import styles from "./PostDetails.page.module.css"
 import { useLoaderData } from "react-router-dom";
 import {useState} from "react"; 
+import { useNavigate } from "react-router-dom";
 
 import { useForm } from '@mantine/form';
 
 function PostDetailsPage() {
   const post = useLoaderData();
   const { user } = useBoundStore((state) => state);
+  const navigate = useNavigate();
 
   const handleDelete = async () => {
     const res = await axios.post(`${DOMAIN}/api/process-delete`, post)
@@ -25,7 +27,7 @@ function PostDetailsPage() {
     form.values.userId = post.userId;
     const res = await axios.post(`${DOMAIN}/api/process-update`, values)
     if (res?.data.success) {
-      navigate("/posts");
+      window.location.reload();
     }
   };
 
@@ -99,7 +101,7 @@ function PostDetailsPage() {
                 <Link onClick={() => setIsEdit(true)}>Edit</Link>
               </Button>
               <Button>
-                <Link to="/posts" onClick={handleDelete}>Delete</Link>
+                <Link onClick={handleDelete}>Delete</Link>
               </Button>
             </Stack> : ""}
           </Grid.Col>
