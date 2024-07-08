@@ -1,23 +1,25 @@
 import { Link, useParams, useSearchParams } from "react-router-dom";
 import DOMAIN from "../../services/endpoint";
 import axios from "axios";
-import { Button, Container, Grid, Stack, Box, TextInput, Group } from "@mantine/core";
+import { Button, Container, Grid, Stack, Box, TextInput, Group, Loader } from "@mantine/core";
 import useBoundStore from "../../store/Store";
 import styles from "./PostDetails.page.module.css"
 import { useLoaderData } from "react-router-dom";
 import {useState} from "react"; 
 import { useNavigate } from "react-router-dom";
-
 import { useForm } from '@mantine/form';
+import spinnerStyle from "./spinner.module.css";
 
 function PostDetailsPage() {
   const post = useLoaderData();
   const { user } = useBoundStore((state) => state);
   const navigate = useNavigate();
+  const [isSpinner, setIsSpinner] = useState(false);
 
   const handleDelete = async () => {
     const res = await axios.post(`${DOMAIN}/api/process-delete`, post)
     if (res?.data.success) {
+      setIsSpinner(true);
       navigate("/posts");
     }
   }
@@ -30,7 +32,7 @@ function PostDetailsPage() {
       window.location.reload();
     }
   };
-
+  
   const form = useForm({
     mode: 'uncontrolled',
     initialValues: {
@@ -47,7 +49,7 @@ function PostDetailsPage() {
     <>
       {isEdit ? 
       <Box maw={300} mx="auto">
-      <form onSubmit={form.onSubmit(handleUpdate)}>
+      <form onSubmit={form.onSubmit(handleUpdate)} className={spinnerStyle.spinnerBase}>
         <TextInput
           label="Title"
           placeholder="Enter a Title"
@@ -74,10 +76,11 @@ function PostDetailsPage() {
         <Group position="right" mt="md">
           <Button type="submit">Update</Button>
         </Group>
+        {isSpinner ? <Loader className={spinnerStyle.spinner}/> : ""}
       </form>
       </Box>
       :
-      <Container>
+      <Container className={spinnerStyle.spinnerBase}>
         <Grid>
           <Grid.Col span={user.id === post.userId ? 4 : 6}>
             <Stack>
@@ -105,8 +108,9 @@ function PostDetailsPage() {
           </Grid.Col>
         </Grid>
         <Button>
-          <Link to="/posts">Back to Posts</Link>
+          <Link to="/posts" onClick={() => setIsSpinner(true)}>Back to Posts</Link>
         </Button>
+        {isSpinner ? <Loader className={spinnerStyle.spinner}/> : ""}
       </Container>
 }
     </>

@@ -18,14 +18,17 @@ import {
 } from '@mantine/core';
 import classes from './AuthenticationTitle.module.css';
 import { useForm, hasLength, isEmail } from '@mantine/form';
+import { useState } from "react";
+import spinnerStyle from "./spinner.module.css";
 
 const LoginPage = () => {
   const navigate = useNavigate();
   const { loginService, authLoading, user } = useBoundStore((state) => state);
-
+  const [isSpinner, setIsSpinner] = useState(false);
 
   useEffect(() => {
     if (!!user) {
+      setIsSpinner(true);
       navigate("/posts");
     }
   }, [user]);
@@ -47,36 +50,35 @@ const LoginPage = () => {
   });
 
   return (
-    <Container size={420} my={40}>
-      <Title ta="center" className={classes.title}>
-          Welcome back!
-      </Title>
-      <Text c="dimmed" size="sm" ta="center" mt={5}>
-        Do not have an account yet?{' '}
-        <Anchor size="sm" component="button">
-          Create account
-        </Anchor>
-      </Text>
-      <form onSubmit={form.onSubmit(onLogin)}>
-        <TextInput {...form.getInputProps('email')} label="Email" placeholder="email" name="email" type="email" required />
-        <PasswordInput {...form.getInputProps('password')} label="Password" placeholder="password" name="password" type="password" required mt="md" />
-        <Group justify="space-between" mt="lg">
-          <Checkbox label="Remember me" />
-          <Anchor component="button" size="sm">
-            Forgot password?
+      <Container size={420} my={40}>
+        <Title ta="center" className={classes.title}>
+            Welcome back!
+        </Title>
+        <Text c="dimmed" size="sm" ta="center" mt={5}>
+          Do not have an account yet?{' '}
+          <Anchor size="sm" component="button">
+            Create account
           </Anchor>
-        </Group>
-        <Button type="submit" fullWidth mt="xl">
-          Login
-        </Button>
-        <Center>
-          {authLoading ? <Loader color="blue"/> : null}
-        </Center>
-      </form>
-      
-      
-
-    </Container>
+        </Text>
+        <form onSubmit={form.onSubmit(onLogin)} className={spinnerStyle.spinnerBase}>
+          <TextInput {...form.getInputProps('email')} label="Email" placeholder="email" name="email" type="email" required />
+          <PasswordInput {...form.getInputProps('password')} label="Password" placeholder="password" name="password" type="password" required mt="md" />
+          <Group justify="space-between" mt="lg">
+            <Checkbox label="Remember me" />
+            <Anchor component="button" size="sm">
+              Forgot password?
+            </Anchor>
+          </Group>
+          <Button type="submit" fullWidth mt="xl">
+            Login
+          </Button>
+          <Center>
+            {authLoading ? "Loading" : null}
+          </Center>
+          {isSpinner ? <Loader className={spinnerStyle.spinner}/> : ""}
+        </form>
+        
+      </Container>
   );
 };
 

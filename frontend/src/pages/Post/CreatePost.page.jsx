@@ -1,14 +1,17 @@
-import { TextInput, Button, Group, Box } from "@mantine/core";
+import { TextInput, Button, Group, Box, Loader } from "@mantine/core";
 import DOMAIN from "../../services/endpoint";
 import axios from "axios";
 import { useForm } from "@mantine/form";
 import { useNavigate } from "react-router-dom";
 import useBoundStore from "../../store/Store";
 import { v4 as uuidv4 } from 'uuid';
+import spinnerStyle from "./spinner.module.css";
+import { useState } from "react";
 
 function CreatePostPage() {
   const { user } = useBoundStore((state) => state);
   const navigate = useNavigate();
+  const [isSpinner, setIsSpinner] = useState(false);
   const form = useForm({
     initialValues: {
       title: "",
@@ -23,13 +26,14 @@ function CreatePostPage() {
     form.values.userId = user.id;
     const res = await axios.post(`${DOMAIN}/api/process-create`, values);
     if (res?.data.success) {
+      setIsSpinner(true);
       navigate("/posts");
     }
   };
 
   return (
     <Box maw={300} mx="auto">
-      <form onSubmit={form.onSubmit(handleSubmit)}>
+      <form onSubmit={form.onSubmit(handleSubmit)} className={spinnerStyle.spinnerBase}>
         <TextInput
           label="Title"
           placeholder="Enter a Title"
@@ -56,6 +60,7 @@ function CreatePostPage() {
         <Group position="right" mt="md">
           <Button type="submit">Submit</Button>
         </Group>
+        {isSpinner ? <Loader className={spinnerStyle.spinner}/> : ""}
       </form>
     </Box>
   );
