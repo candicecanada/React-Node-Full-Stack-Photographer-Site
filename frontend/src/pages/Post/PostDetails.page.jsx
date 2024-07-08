@@ -76,8 +76,6 @@ function PostDetailsPage() {
         </Group>
       </form>
       </Box>
-             
-
       :
       <Container>
         <Grid>
@@ -94,7 +92,7 @@ function PostDetailsPage() {
               <img src={post.image} alt={post.title} className={styles.image}/>
             </Box>
           </Grid.Col>
-          <Grid.Col span={user.id === post.userId ? 4 : 0}>
+          <Grid.Col span={user.id === post.userId ? 2 : 0}>
             {user.id === post.userId ? 
             <Stack>
               <Button>
