@@ -11,7 +11,8 @@ import {
   sleep,
   findPostById,
   deletePostById,
-  updatePostById
+  updatePostById,
+  decorateAuthorByPost,
 } from "./fakedb";
 
 const port = 8085;
@@ -60,7 +61,8 @@ app.get("/api/posts/:id", (req, res) => {
   const postId = req.params.id;
   // The line below should be fixed.
   const post = findPostById(postId);
-  res.json(post);
+  const author = decorateAuthorByPost(post);
+  res.json({post, author});
 });
 
 /**

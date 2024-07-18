@@ -9,7 +9,7 @@ import { useState } from "react";
 
 function EditPostPage() {
   const params = useParams();
-  const post = useLoaderData();
+  const { post } = useLoaderData();
   const { user } = useBoundStore((state) => state);
   const navigate = useNavigate();
   const [isSpinner, setIsSpinner] = useState(false);

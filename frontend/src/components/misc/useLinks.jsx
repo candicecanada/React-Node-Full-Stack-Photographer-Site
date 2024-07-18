@@ -17,9 +17,6 @@ export default () => {
 
   const items = !user
     ? [
-        <NavLink onClick={handleClick} end to="/">
-          <img src="/logo.png" alt="Hi Photos Logo" width={200}/>
-        </NavLink>,
         <NavLink onClick={handleClick} className={classes.link} end to="/">
           Home
         </NavLink>,
@@ -28,9 +25,6 @@ export default () => {
         </NavLink>,
       ]
     : [
-        <NavLink onClick={handleClick} end to="/posts">
-          <img src="/logo.png" alt="Hi Photos Logo" width={200}/>
-        </NavLink>,
         <NavLink onClick={handleClick} className={classes.link} end to="/posts">
           Posts
         </NavLink>,

@@ -12,7 +12,7 @@ export function ArticleCardImage({ title, category, image, id }) {
       className={classes.card}
     >
       <div>
-        <Text className={classes.category} size="xs">
+        <Text className={classes.category} size="xs" c="teal.4">
           {category}
         </Text>
         <Title order={3} className={classes.title}>

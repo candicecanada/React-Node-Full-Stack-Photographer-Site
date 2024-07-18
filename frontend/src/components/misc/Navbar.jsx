@@ -12,6 +12,7 @@ const Navbar = () => {
   return (
     <header className={classes.header}>
       <Container size="md" className={classes.inner}>
+      <img src="/logo.png" alt="Hi Photos Logo" width={200}/>
         <Group gap={5} visibleFrom="xs">
           {items}
         </Group>

@@ -1,3 +1,11 @@
 .image {
     width: 100%
 }
+
+.link, .link:visited {
+    text-align: center;
+    color: white;
+    background-color: rgb(23, 117, 223);
+    border: 2px rgb(23, 117, 223) solid;
+    border-radius: 5px;;
+}

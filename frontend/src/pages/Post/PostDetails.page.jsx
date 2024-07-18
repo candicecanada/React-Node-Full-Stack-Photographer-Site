@@ -12,18 +12,11 @@ import spinnerStyle from "./spinner.module.css";
 
 function PostDetailsPage() {
   const params = useParams();
-  const post = useLoaderData();
+  const { post, author } = useLoaderData();
   const { user } = useBoundStore((state) => state);
   const navigate = useNavigate();
   const [isSpinner, setIsSpinner] = useState(false);
 
-  // const handleDelete = async () => {
-  //   const res = await axios.post(`${DOMAIN}/api/posts/${params.id}/delete`, post)
-  //   if (res?.data.success) {
-  //     setIsSpinner(true);
-  //     navigate("/posts");
-  //   }
-  // }
   
   const form = useForm({
     mode: 'uncontrolled',
@@ -35,38 +28,43 @@ function PostDetailsPage() {
     },
   });
 
+  
 
   return (
       <Container className={spinnerStyle.spinnerBase}>
         <Grid>
-          <Grid.Col span={user.id === post.userId ? 4 : 6}>
+          <Grid.Col span={6}>
             <Stack>
-              <Box>Author: {post.userId}</Box>
+              <Box>Author: {author}</Box>
               <Box>Title: {post.title}</Box>
               <Box>Category: {post.category}</Box>
               <Box>Content: {post.content}</Box>
           </Stack>
           </Grid.Col>
-          <Grid.Col span={user.id === post.userId ? 4 : 6}>
+          <Grid.Col span={6}>
             <Box>
               <img src={post.image} alt={post.title} className={styles.image}/>
             </Box>
           </Grid.Col>
-          <Grid.Col span={user.id === post.userId ? 2 : 0}>
-            {user.id === post.userId ? 
-            <Stack>
-              <Button>
-                <Link to={`/posts/${params.id}/edit`}>Edit</Link>
-              </Button>
-              <Button>
-                <Link to={`/posts/${params.id}/deleteConfirm`}>Delete</Link>
-              </Button>
-            </Stack> : ""}
-          </Grid.Col>
         </Grid>
-        <Button>
-          <Link to="/posts" onClick={() => setIsSpinner(true)}>Back to Posts</Link>
-        </Button>
+        {user.id === post.userId 
+        ? <Grid>
+            <Grid.Col span={4}>
+              <Stack>
+                <Link to={`/posts/${params.id}/edit`} className={styles.link}>Edit</Link>
+                <Link to={`/posts/${params.id}/deleteConfirm`} className={styles.link}>Delete</Link>
+                <Link to="/posts" className={styles.link} onClick={() => setIsSpinner(true)}>Back to Posts</Link>
+              </Stack>
+            </Grid.Col>
+        </Grid> 
+        : <Grid>
+            <Grid.Col span={4}>
+              <Stack>
+                <Link to="/posts" className={styles.link} onClick={() => setIsSpinner(true)}>Back to Posts</Link>
+              </Stack>
+            </Grid.Col>
+        </Grid> 
+        }      
         {isSpinner ? <Loader className={spinnerStyle.spinner}/> : ""}
       </Container>
   );

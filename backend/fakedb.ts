@@ -70,6 +70,12 @@ export const findUserById = (id: number) => {
   return user;
 };
 
+export const decorateAuthorByPost = (post: any) => {
+  const uemail = findUserById(post.userId).email;
+  const author = uemail.substring(0, uemail.indexOf("@"));
+  return author;
+}
+
 export const findPostById = (id: any) => {
   const post = posts.find((post) => post.id.toString() === id.toString());
   if (!post) throw new Error("Post not found");
