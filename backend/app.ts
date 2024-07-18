@@ -21,6 +21,7 @@ app.use(express.json());
 
 // TODO: Obviously use a more secure signing key than "secret"
 app.post("/api/user/login", (req, res) => {
+  console.log("POST: /api/user/login");
   try {
     const { email, password } = req.body;
     const user = verifyUser(email, password);
@@ -34,6 +35,7 @@ app.post("/api/user/login", (req, res) => {
 });
 
 app.post("/api/user/validation", (req, res) => {
+  console.log("POST: /api/user/validation");
   try {
     const authHeader = req.headers.authorization;
     const token = parseToken(authHeader, res);
@@ -46,6 +48,7 @@ app.post("/api/user/validation", (req, res) => {
 });
 
 app.get("/api/posts", async (req, res) => {
+  console.log("GET: /api/posts");
   // Sleep delay goes here
   await sleep(1000);
   res.json(posts);
@@ -53,6 +56,7 @@ app.get("/api/posts", async (req, res) => {
 
 // ⭐️ TODO: Implement this yourself
 app.get("/api/posts/:id", (req, res) => {
+  console.log("GET: /api/posts/:id");
   const postId = req.params.id;
   // The line below should be fixed.
   const post = findPostById(postId);
@@ -69,20 +73,22 @@ app.get("/api/posts/:id", (req, res) => {
  *     What if you make a request to this route with a valid token but
  *     with an empty/incorrect payload (post)
  */
-app.post("/api/process-create", (req, res) => {
+app.post("/api/posts/create", (req, res) => {
+  console.log("POST: /api/posts/create");
   const newPost = req.body;
   addPost(newPost);
   res.status(200).json({ success: true });
 });
 
-app.post("/api/process-delete", (req, res) => {
+app.post("/api/posts/:id/delete", (req, res) => {
+  console.log("POST: /api/posts/:id/delete");
   const postId = req.body.id;
   deletePostById(postId);
-
   res.status(200).json({ success: true });
 })
 
-app.post("/api/process-update", (req, res) => {
+app.post("/api/posts/:id/update", (req, res) => {
+  console.log("POST: /api/posts/:id/update");
   const post = req.body;
   updatePostById(post.id, post);
 

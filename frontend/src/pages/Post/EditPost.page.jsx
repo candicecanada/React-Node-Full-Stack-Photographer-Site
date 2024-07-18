@@ -1,33 +1,35 @@
-import { TextInput, Button, Group, Box, Loader } from "@mantine/core";
+import { TextInput, Button, Group, Box, Loader, Code } from "@mantine/core";
 import DOMAIN from "../../services/endpoint";
 import axios from "axios";
 import { useForm } from "@mantine/form";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLoaderData, useParams } from "react-router-dom";
 import useBoundStore from "../../store/Store";
-import { v4 as uuidv4 } from 'uuid';
 import spinnerStyle from "./spinner.module.css";
 import { useState } from "react";
 
-function CreatePostPage() {
+function EditPostPage() {
+  const params = useParams();
+  const post = useLoaderData();
   const { user } = useBoundStore((state) => state);
   const navigate = useNavigate();
   const [isSpinner, setIsSpinner] = useState(false);
   const form = useForm({
     initialValues: {
-      title: "",
-      category: "",
-      image: "",
-      content: "",
+      title: post.title,
+      category: post.category,
+      image: post.image,
+      content: post.content,
     },
   });
 
   const handleSubmit = async (values) => {
-    form.values.id = uuidv4();
+    form.values.id = params.id;
     form.values.userId = user.id;
-    const res = await axios.post(`${DOMAIN}/api/posts/create`, values);
+    console.log(values);
+    const res = await axios.post(`${DOMAIN}/api/posts/${params.id}/update`, values);
     if (res?.data.success) {
       setIsSpinner(true);
-      navigate("/posts");
+      navigate(`/posts/${params.id}`);
     }
   };
 
@@ -58,12 +60,18 @@ function CreatePostPage() {
         />
 
         <Group position="right" mt="md">
-          <Button type="submit">Submit</Button>
+          <Button type="submit">Update</Button>
         </Group>
         {isSpinner ? <Loader className={spinnerStyle.spinner}/> : ""}
+
       </form>
     </Box>
   );
 }
 
-export default CreatePostPage;
+export const editPostLoader = async ({ params }) => {
+    const res = await axios.get(`${DOMAIN}/api/posts/${params.id}`)
+    return res.data;
+}
+
+export default EditPostPage;
