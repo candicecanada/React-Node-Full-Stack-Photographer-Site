@@ -4,6 +4,7 @@ import Landing from "./pages/Landing/Landing.page";
 import NotFound from "./pages/Notfound/NotFound.page";
 import CreatePostPage from "./pages/Post/CreatePost.page";
 import EditPostPage from "./pages/Post/EditPost.page";
+import DeleteConfirmPage from "./pages/Post/DeleteConfirm.page"
 import ProtectedRoute from "./services/ProtectedRoute";
 import useBoundStore from "./store/Store";
 import {
@@ -15,6 +16,7 @@ import { PostPage, postsLoader } from "./pages/Post/Post.page";
 import { postDetailsLoader } from "./pages/Post/PostDetails.page";
 import PostDetailsPage from "./pages/Post/PostDetails.page";
 import { editPostLoader } from "./pages/Post/EditPost.page";
+import { deleteConfirmLoader } from "./pages/Post/DeleteConfirm.page";
 
 export const Router = () => {
   const authCheck = useBoundStore((state) => {
@@ -74,7 +76,7 @@ export const Router = () => {
           }
           loader={editPostLoader}
         />
-        {/* <Route 
+        <Route 
           path="posts/:id/deleteConfirm"
           element={
             <ProtectedRoute isAllowed={!!authCheck}>
@@ -82,8 +84,15 @@ export const Router = () => {
             </ProtectedRoute>
           }
           loader={deleteConfirmLoader}
-        /> */}
-        <Route path="/" element={<Landing />} />
+        />
+        <Route path="/" 
+          element={
+            <ProtectedRoute isAllowed={!authCheck}>
+              <Landing />
+            </ProtectedRoute>
+          
+          } 
+        />
         <Route path="*" element={<NotFound />} />
       </Route>
     )

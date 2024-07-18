@@ -17,22 +17,13 @@ function PostDetailsPage() {
   const navigate = useNavigate();
   const [isSpinner, setIsSpinner] = useState(false);
 
-  const handleDelete = async () => {
-    const res = await axios.post(`${DOMAIN}/api/posts/${params.id}/delete`, post)
-    if (res?.data.success) {
-      setIsSpinner(true);
-      navigate("/posts");
-    }
-  }
-
-  // const handleUpdate = async (values) => {
-  //   form.values.id = post.id;
-  //   form.values.userId = post.userId;
-  //   const res = await axios.post(`${DOMAIN}/api/posts/${params.id}/update`, values)
+  // const handleDelete = async () => {
+  //   const res = await axios.post(`${DOMAIN}/api/posts/${params.id}/delete`, post)
   //   if (res?.data.success) {
-  //     navigate(`/posts/${params.id}`)
+  //     setIsSpinner(true);
+  //     navigate("/posts");
   //   }
-  // };
+  // }
   
   const form = useForm({
     mode: 'uncontrolled',
@@ -44,7 +35,6 @@ function PostDetailsPage() {
     },
   });
 
-  const [isEdit, setIsEdit] = useState(false);
 
   return (
       <Container className={spinnerStyle.spinnerBase}>
@@ -69,7 +59,7 @@ function PostDetailsPage() {
                 <Link to={`/posts/${params.id}/edit`}>Edit</Link>
               </Button>
               <Button>
-                <Link onClick={handleDelete}>Delete</Link>
+                <Link to={`/posts/${params.id}/deleteConfirm`}>Delete</Link>
               </Button>
             </Stack> : ""}
           </Grid.Col>
@@ -84,7 +74,6 @@ function PostDetailsPage() {
 
 export const postDetailsLoader = async ({ params }) => {
   const res = await axios.get(`${DOMAIN}/api/posts/${params.id}`)
-  // console.log(res.data);
   return res.data;
 };
 
