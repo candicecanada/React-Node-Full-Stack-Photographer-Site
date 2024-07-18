@@ -51,7 +51,6 @@ app.get("/api/posts", async (req, res) => {
   res.json(posts);
 });
 
-
 // ⭐️ TODO: Implement this yourself
 app.get("/api/posts/:id", (req, res) => {
   const postId = req.params.id;
