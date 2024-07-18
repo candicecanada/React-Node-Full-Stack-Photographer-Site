@@ -11,27 +11,19 @@ import { useForm } from '@mantine/form';
 import spinnerStyle from "./spinner.module.css";
 
 function PostDetailsPage() {
+  const params = useParams();
   const post = useLoaderData();
   const { user } = useBoundStore((state) => state);
   const navigate = useNavigate();
   const [isSpinner, setIsSpinner] = useState(false);
 
-  const handleDelete = async () => {
-    const res = await axios.post(`${DOMAIN}/api/process-delete`, post)
-    if (res?.data.success) {
-      setIsSpinner(true);
-      navigate("/posts");
-    }
-  }
-
-  const handleUpdate = async (values) => {
-    form.values.id = post.id;
-    form.values.userId = post.userId;
-    const res = await axios.post(`${DOMAIN}/api/process-update`, values)
-    if (res?.data.success) {
-      window.location.reload();
-    }
-  };
+  // const handleDelete = async () => {
+  //   const res = await axios.post(`${DOMAIN}/api/posts/${params.id}/delete`, post)
+  //   if (res?.data.success) {
+  //     setIsSpinner(true);
+  //     navigate("/posts");
+  //   }
+  // }
   
   const form = useForm({
     mode: 'uncontrolled',
@@ -43,43 +35,8 @@ function PostDetailsPage() {
     },
   });
 
-  const [isEdit, setIsEdit] = useState(false);
 
   return (
-    <>
-      {isEdit ? 
-      <Box maw={300} mx="auto">
-      <form onSubmit={form.onSubmit(handleUpdate)} className={spinnerStyle.spinnerBase}>
-        <TextInput
-          label="Title"
-          placeholder="Enter a Title"
-          {...form.getInputProps("title")}
-        />
-
-        <TextInput
-          label="Category"
-          placeholder="Enter a Category"
-          {...form.getInputProps("category")}
-        />
-        <TextInput
-          label="Image"
-          placeholder="Enter an Image"
-          {...form.getInputProps("image")}
-        />
-
-        <TextInput
-          label="Content"
-          placeholder="Enter some content"
-          {...form.getInputProps("content")}
-        />
-
-        <Group position="right" mt="md">
-          <Button type="submit">Update</Button>
-        </Group>
-        {isSpinner ? <Loader className={spinnerStyle.spinner}/> : ""}
-      </form>
-      </Box>
-      :
       <Container className={spinnerStyle.spinnerBase}>
         <Grid>
           <Grid.Col span={user.id === post.userId ? 4 : 6}>
@@ -99,10 +56,10 @@ function PostDetailsPage() {
             {user.id === post.userId ? 
             <Stack>
               <Button>
-                <Link onClick={() => setIsEdit(true)}>Edit</Link>
+                <Link to={`/posts/${params.id}/edit`}>Edit</Link>
               </Button>
               <Button>
-                <Link onClick={handleDelete}>Delete</Link>
+                <Link to={`/posts/${params.id}/deleteConfirm`}>Delete</Link>
               </Button>
             </Stack> : ""}
           </Grid.Col>
@@ -112,14 +69,11 @@ function PostDetailsPage() {
         </Button>
         {isSpinner ? <Loader className={spinnerStyle.spinner}/> : ""}
       </Container>
-}
-    </>
   );
 }
 
 export const postDetailsLoader = async ({ params }) => {
   const res = await axios.get(`${DOMAIN}/api/posts/${params.id}`)
-  console.log(res.data);
   return res.data;
 };
 

@@ -3,7 +3,7 @@ import { Container } from "@mantine/core";
 const Landing = () => {
   return (
     <Container>
-      <h1>Welcome to the homepage. Anyone can see this page</h1>
+      <h1>Welcome to the homepage. Logout users can see this page</h1>
     </Container>
   );
 };
